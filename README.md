@@ -71,7 +71,7 @@ This project links **data cleaning → EDA → feature engineering → modeling 
 - **Source:** Diabetes 130-US hospitals dataset (UCI / real-world encounters, 1999–2008).
 - **Scale:** **99,492** encounters after cohort definition; **9,433** 30-day readmissions (9.5% rate).
 - **Content:** Demographics, admission/discharge, diagnoses (ICD-9), procedures, medications, length of stay, prior utilization, and readmission outcome.
-- **Location:** Raw and processed data live in `readmission_project/data/` (see [Repository Structure](#-repository-structure)).
+- **Location:** Raw and processed data live in `data/` (see [Repository Structure](#-repository-structure)).
 
 | Artifact | Description |
 |----------|-------------|
@@ -117,7 +117,7 @@ This project links **data cleaning → EDA → feature engineering → modeling 
   └──────────────┘     └──────────────┘     └──────────────┘
 ```
 
-**Pipeline scripts:** `scripts/01_load_data.py` → `02_readmission_cohorts.sql` → `02_prepare_model_data.py` → `03_logistic_regression.py` → `04_financial_impact_analysis.py` → `readmission_project/dashboard/build_dashboard.py`. Run all via `run_all.py`.
+**Pipeline:** `scripts/01_load_data.py` → `03_readmission_cohorts.sql` → `02_explore_data.sql` → `04_risk_factor_analysis.sql` → `05_prepare_model_data.py` → `06_logistic_regression.py` → `07_financial_analysis.py` → `08_dashboard_data.sql`. Run all via **`python run_all.py`** or **`python scripts/run_all.py`** from repo root.
 
 ---
 
@@ -166,11 +166,11 @@ Full coefficient table: `readmission_project/outputs/feature_importance.csv` or 
 
 | Visualization | Description | Location |
 |----------------|-------------|----------|
-| **Readmission dashboard** | KPIs, trends, risk heat map | `readmission_project/outputs/readmission_dashboard.png` |
-| **Financial dashboard** | Cost by diagnosis, age, ROI scenarios | `readmission_project/outputs/financial_analysis_dashboard.png` |
-| **Model performance** | ROC, precision-recall, feature coefficients | `readmission_project/outputs/model_performance.png` |
-| **Odds ratios (model)** | Risk vs protective factors (bar chart) | `readmission_project/outputs/model_viz.png` |
-| **Model + scaler** | Coefficients and scaler (mean/scale) | `readmission_project/outputs/model_and_scaler.png` |
+| **Model coefficients** | Risk vs protective factors (bar chart) | `outputs/visuals/model_coefficients_visual.png` |
+| **Feature importance** | ROC, precision-recall, coefficients | `outputs/visuals/feature_importance_styled.png` |
+| **Financial dashboard** | Cost by diagnosis, age, ROI scenarios | `outputs/visuals/financial_impact_dashboard.png` |
+| **Readmission trend** | KPIs, trends | `outputs/visuals/readmission_trend.png` |
+| **Risk heat map** | Risk by segment | `outputs/visuals/risk_heatmap.png` |
 
 **Key findings:**
 
@@ -222,25 +222,30 @@ Hospitals can use this analysis to:
 ├── run_all.py                   # Run full pipeline (data → model → reports)
 ├── requirements.txt             # Python dependencies
 │
-├── data/                        # Data overview (data/README.md; files in readmission_project/data)
-├── notebooks/                   # Jupyter notebooks — EDA (01_eda_readmissions.ipynb)
-├── scripts/                     # Pipeline scripts (scripts/README.md)
-│   ├── 01_load_data.py         # Load CSV → SQLite
-│   ├── 02_readmission_cohorts.sql
-│   ├── 02_prepare_model_data.py # Feature engineering, train/test split
-│   ├── 03_logistic_regression.py
-│   └── 04_financial_impact_analysis.py
-│
-├── visualizations/              # Chart index (visualizations/README.md)
-├── reports/                     # Executive summary, model card, impact statement
-│   ├── EXECUTIVE_SUMMARY.md
-│   ├── MODEL_CARD.md
-│   └── impact_statement.txt
-│
-└── readmission_project/
-    ├── data/                    # Raw & processed data, SQLite DB, train/test
-    ├── outputs/                # Model (.pkl), CSVs, dashboards, helper scripts
-    └── dashboard/               # Dashboard build script, Tableau spec, SQL extracts
+├── data/                        # data_dictionary.md, sample_data.csv, raw CSVs, readmissions.db
+├── scripts/                     # 01_load → 08_dashboard_data.sql, run_all.py
+├── notebooks/                   # 01_exploratory_analysis, 02_model_development, 03_financial_analysis
+├── outputs/                     # executive_summary, impact_statement, key_findings, CSVs
+│   ├── visuals/                 # PNGs (model coefficients, financial dashboard, etc.)
+│   └── model/                  # readmission_model.pkl, scaler.pkl, model_metadata.json
+├── dashboard/                   # dashboard_design.md, tableau_prompts.md, screenshots
+├── docs/                        # methodology, cms_penalty_calculation, roi_analysis
+└── tests/                       # test_model.py, test_data_quality.py
+```
+
+*You can add `docs/presentation.pptx` manually for stakeholder slides.*
+
+---
+
+## 🔗 GitHub
+
+**Repository:** [https://github.com/DRANI407/Hospital-Readmission-Reduction-Initiative](https://github.com/DRANI407/Hospital-Readmission-Reduction-Initiative)
+
+To push updates from your machine:
+```bash
+git add .
+git commit -m "Your message"
+git push origin main
 ```
 
 ---
@@ -267,18 +272,19 @@ This runs, in order: data load → cohort SQL → model data prep → logistic r
 
 ```python
 import joblib
-model = joblib.load('readmission_project/outputs/readmission_model.pkl')
-scaler = joblib.load('readmission_project/outputs/scaler.pkl')
+model = joblib.load('outputs/model/readmission_model.pkl')
+scaler = joblib.load('outputs/model/scaler.pkl')
 # Use scaler.transform(X) then model.predict_proba(X_scaled)[:, 1]
 ```
 
-See `readmission_project/outputs/MODEL_CARD.md` and `predict_example.py` for feature list and preprocessing.
+Feature list and preprocessing: see `data/data_dictionary.md` and `outputs/model/model_metadata.json`.
 
 ### Key outputs to review
 
-- **Executive summary:** `reports/EXECUTIVE_SUMMARY.md` or `readmission_project/outputs/EXECUTIVE_SUMMARY.md`
-- **Model card:** `readmission_project/outputs/MODEL_CARD.md`
-- **Dashboards:** `readmission_project/outputs/readmission_dashboard.png`, `financial_analysis_dashboard.png`
+- **Executive summary:** `outputs/executive_summary.md`
+- **Impact statement:** `outputs/impact_statement.txt`
+- **Key findings:** `outputs/key_findings.csv`
+- **Dashboards:** `outputs/visuals/`
 
 ---
 

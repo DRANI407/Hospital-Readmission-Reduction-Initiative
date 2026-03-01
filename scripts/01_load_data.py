@@ -13,13 +13,13 @@ import sqlite3
 import numpy as np
 from pathlib import Path
 
-# Resolve data path (data lives in readmission_project/data/)
+# Repo root: scripts/ -> parent.parent
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DATA_DIR = PROJECT_ROOT / 'readmission_project' / 'data'
+DATA_DIR = PROJECT_ROOT / 'data'
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-# Create database connection
-conn = sqlite3.connect(DATA_DIR / 'readmissions.db')
+# Create database connection (use absolute path so it works from any cwd)
+conn = sqlite3.connect(str(DATA_DIR / 'readmissions.db'))
 
 # Load main dataset
 print("Loading diabetic_data.csv...")

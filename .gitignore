@@ -24,12 +24,8 @@ build/
 *.swo
 .DS_Store
 
-# Project: optional (uncomment to exclude large/generated files)
-# readmission_project/data/*.csv
-# readmission_project/data/*.db
-# readmission_project/outputs/*.pkl
-# readmission_project/outputs/*.png
-
-# Keep structure; ignore only if you want a smaller clone (data elsewhere)
-# *.pkl
-# *.db
+# Optional: uncomment to exclude large files for a smaller clone
+# data/diabetic_data.csv
+# data/readmissions.db
+# data/model_ready_data.csv
+# outputs/model/*.pkl

@@ -1,0 +1,25 @@
+{
+  "model_type": "LogisticRegression",
+  "n_features": 15,
+  "feature_names": [
+    "age_midpoint",
+    "time_in_hospital",
+    "num_lab_procedures",
+    "num_procedures",
+    "num_medications",
+    "number_diagnoses",
+    "diabetes_complications",
+    "cardiovascular",
+    "respiratory",
+    "renal",
+    "high_prior_utilization",
+    "long_los",
+    "polypharmacy",
+    "a1c_abnormal",
+    "insulin_level"
+  ],
+  "intercept": -0.21768159548934016,
+  "roc_auc": 0.7145055773289116,
+  "n_train": 8768,
+  "n_test": 2923
+}
