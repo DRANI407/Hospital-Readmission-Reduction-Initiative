@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+.env
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Project: optional (uncomment to exclude large/generated files)
+# readmission_project/data/*.csv
+# readmission_project/data/*.db
+# readmission_project/outputs/*.pkl
+# readmission_project/outputs/*.png
+
+# Keep structure; ignore only if you want a smaller clone (data elsewhere)
+# *.pkl
+# *.db
